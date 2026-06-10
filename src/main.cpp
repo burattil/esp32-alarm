@@ -7,13 +7,14 @@ Keypad keypad(13, 12, 14, 27, 26, 25, 33, 32);
 int num;
 
 void setup() {
-  // put your setup code here, to run once:
+  // Initializations
   keypad.init();
   displayInit();
+
+  // CHANGE KEYPAD FROM HANDLING DISPLAY
   num = keypad.getAndDisplayInput();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   
 }
