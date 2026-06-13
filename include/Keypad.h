@@ -11,17 +11,20 @@ class Keypad
     uint8_t rOne, rTwo, rThree, rFour;
     uint8_t cOne, cTwo, cThree, cFour; 
 
+    // Variable to store the last key pressed
+    uint8_t lastKey = NO_KEY;
+
+    // Value to store when the last press was
+    int lastPress = 0;
+
+    // Value to determine if enter has been pressed
+    bool enterEvent = false;
+
     // Scan once
     uint8_t scanOnce();
 
-    // Helper function to wait till it is released
-    void waitForRelease();
-
     // Get and return the pressed key
     uint8_t getKey();
-
-    // Return whether or not a button is being pressed
-    bool isPressed();
 
   public: 
     // Constructor function
@@ -30,8 +33,11 @@ class Keypad
     // Pin initializer function
     void init();
 
-    // Get the input
-    int getAndDisplayInput();
+    // Update the input
+    void update(int& time);
+
+    // Function to determine if the enter button ('D') is pressed to change states
+    bool enterPressed();
 };
 
 #endif

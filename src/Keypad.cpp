@@ -1,6 +1,5 @@
-#include "Display.h"
-#include "Keypad.h"
 #include <Arduino.h>
+#include "Keypad.h"
 
 // Save the row and column pins to the class to be used throughout the function 
 Keypad::Keypad(uint8_t rA, uint8_t rB, uint8_t rC, uint8_t rD, uint8_t cA, uint8_t cB, uint8_t cC, uint8_t cD)
@@ -56,7 +55,7 @@ uint8_t Keypad::scanOnce()
     if(digitalRead(cOne) == LOW) return 4;
     if(digitalRead(cTwo) == LOW) return 5;
     if(digitalRead(cThree) == LOW) return 6;
-    if(digitalRead(cFour) == LOW) return 0;
+    if(digitalRead(cFour) == LOW) return NO_KEY;
 
     // Drive the third row low, others high
     digitalWrite(rOne, HIGH);
@@ -68,18 +67,18 @@ uint8_t Keypad::scanOnce()
     if(digitalRead(cOne) == LOW) return 7;
     if(digitalRead(cTwo) == LOW) return 8;
     if(digitalRead(cThree) == LOW) return 9;
-    if(digitalRead(cFour) == LOW) return 0;
+    if(digitalRead(cFour) == LOW) return NO_KEY;
 
-    // Drive the first row low, others high
+    // Drive the fourth row low, others high
     digitalWrite(rOne, HIGH);
     digitalWrite(rTwo, HIGH);
     digitalWrite(rThree, HIGH);
     digitalWrite(rFour, LOW);
 
     // Now check which column is low, and return the associated value with that
-    if(digitalRead(cOne) == LOW) return 0;
+    if(digitalRead(cOne) == LOW) return NO_KEY;
     if(digitalRead(cTwo) == LOW) return 0;
-    if(digitalRead(cThree) == LOW) return 0;
+    if(digitalRead(cThree) == LOW) return NO_KEY;
     if(digitalRead(cFour) == LOW) return 13;
 
     // If nothing is pressed, return the no key constant
@@ -90,68 +89,63 @@ uint8_t Keypad::scanOnce()
 uint8_t Keypad::getKey()
 {
   // Create the variable to store which key is pressed
-  uint8_t key;
+  uint8_t key = scanOnce();
 
-  // Continue looping until one of the return statements is hit
-  while(1)
+  // If a button has been detected
+  if(key != NO_KEY && lastKey == NO_KEY)
   {
-    key = scanOnce();
-
-    // If a button has been detected
-    if(key != NO_KEY)
+    // Add a non-blocking debounce
+    if(millis() - lastPress > 20) 
     {
-      // Debounce
-      delay(20);
-
-      // Check that the same key is being pressed
-      if(scanOnce() == key)
-      {
-        // Wait for the release
-        while(scanOnce() != NO_KEY)
-        {
-          delay(1);
-        }
-
-        return key;
-      }
+      // Update the time of last press, last press, and return
+      lastPress = millis();
+      lastKey = key;
+      return key;
     }
   }
+
+  // If nothing is detected
+  else if(key == NO_KEY)
+  {
+    lastKey = NO_KEY;
+  }
+
+  return NO_KEY;
 }
 
-// Function to get the input while displaying it along the way
-int Keypad::getAndDisplayInput()
+// Function to update the global variable for the time being set
+void Keypad::update(int& time)
 {
-  // Create an integer to store the pressed value in, and the final value
-  uint8_t value = 0;
-  int inputValue = 0;
+  // Get the key being pressed
+  uint8_t key = getKey();
 
-  // Display the value as it comes
-  displayNumber(0);
-
-  // Continue until the enter button ('D') is pressed
-  while(1)
+  // Update if something other than NO_KEY is detected from the scan
+  if(key != NO_KEY)
   {
-    // Get a value
-    value = getKey();
+    // If 'A' is pressed, delete the last digit
+    if(key == 10) time /= 10;
 
-    // "Subtract" if the delete button ('A') has been pressed
-    if(value == 10) inputValue /= 10;
+    // If 'D' is pressed, set the enter variable
+    else if(key == 13) enterEvent = true;
 
-    // Exit the function and return the number if the enter button ('D') is pressed
-    else if(value == 13)
-    {
-      // Make sure that the number is within the appropriate range——correct it if needed
-      if(inputValue >= 9959) inputValue = 9959;
-      else if(inputValue == 0) inputValue = 1;
-
-      // Return the value of num after this
-      return inputValue;
-    }
-
-    // "Add" the other number iff num is not already four digits
-    else if(inputValue / 1000 == 0) inputValue = inputValue * 10 + value;
-
-    // Update the display 
-    displayNumber(inputValue);
+    // If any other number is pressed
+    else if(time / 1000 == 0) time = time * 10 + key;
   }
+
+  return;
+}
+
+// Function to determine if the enter button ('D') is pressed to change states
+bool Keypad::enterPressed()
+{
+  // If 'D' is pressed, return true
+  if(enterEvent) 
+  {
+    // Reset the enter event variable and return true
+    enterEvent = false;
+    return true;
+  }
+
+  // Otherwise, return false
+  return false;
 }
