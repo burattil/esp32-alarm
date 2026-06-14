@@ -8,6 +8,5 @@ extern TM1637Display display;
 // Function prototypes
 void displayInit();
 void displayNumber(int num);
-void countdown(int* num);
 
 #endif

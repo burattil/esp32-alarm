@@ -1,7 +1,13 @@
 #ifndef KEYPAD_H
 #define KEYPAD_H
 
-#define NO_KEY 255
+#define DEBOUNCE_TIME 20
+#define RESET_KEY 250
+#define NO_KEY 251
+#define DELETE_KEY 252
+#define ENTER_KEY 253
+#define PAUSE_KEY 254
+#define RESUME_KEY 255
 
 // Create a class to group the pins 
 class Keypad
@@ -17,14 +23,14 @@ class Keypad
     // Value to store when the last press was
     int lastPress = 0;
 
-    // Value to determine if enter has been pressed
+    // Values to determine if enter, pause, or resume has been pressed
     bool enterEvent = false;
+    bool pauseEvent = false;
+    bool resumeEvent = false;
+    bool resetEvent = false;
 
     // Scan once
     uint8_t scanOnce();
-
-    // Get and return the pressed key
-    uint8_t getKey();
 
   public: 
     // Constructor function
@@ -33,11 +39,26 @@ class Keypad
     // Pin initializer function
     void init();
 
-    // Update the input
-    void update(int& time);
+    // Get and return the pressed key
+    uint8_t getKey();
 
-    // Function to determine if the enter button ('D') is pressed to change states
+    // Update the input
+    void updateTime(uint8_t key, int& time);
+
+    // Update the events
+    void updateEvents(uint8_t key);
+
+    // Function to determine if ENTER is pressed to change states
     bool enterPressed();
+
+    // Function to determine if PAUSE is pressed to change states
+    bool pausePressed();
+
+    // Function to determine if RESUME is pressed to change states
+    bool resumePressed();
+
+    // Function to determine if RESET is pressed to change states
+    bool resetPressed();
 };
 
 #endif

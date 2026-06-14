@@ -1,5 +1,5 @@
-#include "Display.h"
 #include <Arduino.h>
+#include "Display.h"
 
 #define CLK 5
 #define DIO 18
@@ -9,6 +9,7 @@ TM1637Display display(CLK, DIO);
 // Function to initialize the display
 void displayInit()
 {
+  // Set the brightness, display zeroes, and enable the colon
   display.setBrightness(7);
   display.showNumberDecEx(0000, 0b01000000, true);
 
@@ -32,20 +33,4 @@ int minuteAndSecondDecrementer(int* x)
   else (*x)--;                                        // If it is a regular number, decrement it by 1
 
   return *x;
-}
-
-// Function to display the required number on the TM1637Display
-void countdown(int* num) 
-{
-  // Keep going until it is 0
-  while(*num >= 0)
-  {
-    // Display the number/colon and count down every second
-    displayNumber(*num);
-    delay(1000);
-
-    minuteAndSecondDecrementer(num);
-  }
-
-  return;
 }
