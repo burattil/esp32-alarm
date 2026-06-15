@@ -47,12 +47,20 @@ void loop()
       // Check if the enter button is pressed to change states
       if(keypad.enterPressed()) 
       {
-        // Make sure the time being set is valid
-        countdown.modifyTime(startTime);
+        // Check that 00:00 has not been entered
+        if(startTime == 0) break;
 
-        // Reset the timer to begin counting down, then change states
-        countdown.resetTimer();
-        currentState = COUNTING_DOWN;
+        else
+        {
+          // Make sure the time being set is valid
+          countdown.modifyTime(startTime);
+          
+          // ADD ERROR HANDLING FOR IF 00:00 IS ENTERED HERE
+
+          // Reset the timer to begin counting down, then change states
+          countdown.resetTimer();
+          currentState = COUNTING_DOWN;
+        }
       }
 
       break;

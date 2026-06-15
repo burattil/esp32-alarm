@@ -9,9 +9,6 @@ void Countdown::modifyTime(int& time)
     
     // If the seconds are greater than 59, set it to 59
     else if(time % 100 > 59) time = (time / 100) * 100 + 59;
-    
-    // If 0 is entered, set it to 1
-    else if(time == 0) time = 1;
 
     return;
 }
