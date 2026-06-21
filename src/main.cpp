@@ -63,6 +63,9 @@ void loop()
         }
       }
 
+      // If the reset button is pressed, reset the time being set to 0
+      else if(keypad.resetPressed()) startTime = 0;
+
       break;
     }
 
