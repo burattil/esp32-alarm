@@ -14,8 +14,8 @@ class Keypad
 {
   private:
     // Row and column variables
-    uint8_t rOne, rTwo, rThree, rFour;
-    uint8_t cOne, cTwo, cThree, cFour; 
+    uint8_t rOne, rTwo, rThree, rFour,
+            cOne, cTwo, cThree, cFour; 
 
     // Variable to store the last key pressed
     uint8_t lastKey = NO_KEY;

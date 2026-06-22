@@ -1,10 +1,13 @@
-#include <TM1637Display.h>
+#include <Arduino.h>
+#include "AudioPlayer.h"
 #include "Countdown.h"
 #include "Display.h"
 #include "Keypad.h"
 
-Countdown countdown; 
-Keypad keypad(13, 12, 14, 27, 26, 25, 33, 32);
+AudioPlayer player(16, 17); // DFPlayer Mini object
+Countdown countdown; // Countdown object
+Display display(5, 18); // Display object
+Keypad keypad(32, 33, 25, 26, 27, 14, 12, 13); // Keypad object
 
 // Create state machine to handle the different states of the program
 enum State
@@ -24,10 +27,12 @@ int startTime = 0;
 void setup() 
 {
   // Initializations
+  Serial.begin(115200); // Initialize the baud rate for debugging
+  display.init();
+  player.init();
   keypad.init();
-  displayInit();
 }
-// UPDATE KEYPAD.UPDATE STARTTIME THING AS YOU KNOW
+
 void loop() 
 {
   // Switch statement derived from the state machine
@@ -40,7 +45,7 @@ void loop()
       uint8_t key = keypad.getKey();
 
       // Continuously display the time being set and update the time and events
-      displayNumber(startTime);
+      display.displayNumber(startTime);
       keypad.updateTime(key, startTime);
       keypad.updateEvents(key);
 
@@ -54,8 +59,6 @@ void loop()
         {
           // Make sure the time being set is valid
           countdown.modifyTime(startTime);
-          
-          // ADD ERROR HANDLING FOR IF 00:00 IS ENTERED HERE
 
           // Reset the timer to begin counting down, then change states
           countdown.resetTimer();
@@ -78,7 +81,7 @@ void loop()
       keypad.updateEvents(key);
 
       // Begin counting down while displaying the time
-      displayNumber(startTime);
+      display.displayNumber(startTime);
       countdown.decrementTimeMMSS(startTime);
 
       // Check if the pause button is pressed to change states
@@ -108,7 +111,7 @@ void loop()
       keypad.updateEvents(key);
 
       // Continue displaying the time while paused
-      displayNumber(startTime);
+      display.displayNumber(startTime);
 
       // Check if the resume button is pressed to change states
       if(keypad.resumePressed()) 
@@ -133,8 +136,8 @@ void loop()
     case ALARM:
     {
       // Display 0 to indicate that the timer has been completed
-      displayNumber(0);
-
+      display.displayNumber(0);
+      player.playAlarm();
       break;
     }
   }

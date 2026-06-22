@@ -1,13 +1,12 @@
-#include <Arduino.h>
 #include "Display.h"
 
-#define CLK 5
-#define DIO 18
+// Constructor function
+Display::Display(uint8_t clk, uint8_t dio)
+  // Create the object
+  : display(clk, dio) {}
 
-TM1637Display display(CLK, DIO);
-
-// Function to initialize the display
-void displayInit()
+  // Initializing function
+void Display::init()
 {
   // Set the brightness, display zeroes, and enable the colon
   display.setBrightness(7);
@@ -17,20 +16,9 @@ void displayInit()
 }
 
 // Function to display a number
-void displayNumber(int num)
+void Display::displayNumber(int num)
 {
   display.showNumberDecEx(num, 0b01000000, true);
 
   return;
-}
-
-// Helper function to change the seconds into minutes and seconds
-int minuteAndSecondDecrementer(int* x) 
-{
-  // Count down in terms of minutes and seconds
-  if(*x == 0) *x = 0;                                 // If it is 0, keep it at 0
-  else if(*x % 100 == 0) *x -= 41;                    // If it is about to turn to 99, switch it to 59
-  else (*x)--;                                        // If it is a regular number, decrement it by 1
-
-  return *x;
 }
