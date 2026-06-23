@@ -16,17 +16,24 @@ void AudioPlayer::init()
    // Check if there is an error, and send a message if so
    if(!player.begin(DFSerial))
    {
+      pinMode(2, OUTPUT);
+      digitalWrite(2, HIGH);
       Serial.print("DFPlayer failed.\n\nEnsure proper connection and whether SD card is properly inserted.");
       while(true);
    }
 
    // Set the default value to 10
-   player.volume(10);
+   player.volume(20);
 }
 
 // Function to play the alarm
 void AudioPlayer::playAlarm()
 {
-   // Play mp3 #1, the alarm
-   player.play(1);
+   // If the alarm's duration has passed, play it again
+   if(millis() - lastPlayTime >= ALARM_TIME)
+   {
+      // Play it, and store when it began
+      player.play(1);
+      lastPlayTime = millis();
+   }
 }
