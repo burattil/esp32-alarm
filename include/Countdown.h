@@ -11,7 +11,7 @@ class Countdown {
         void modifyTime(int& time);
 
         // Function to reset the lastDecrement variable to start when the countdown starts
-        void resetTimer();
+        void resetLastDecrement();
 
         // Function to decrement the time in minutes and seconds
         void decrementTimeMMSS(int& time);

@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <DFRobotDFPlayerMini.h>
 
-#define ALARM_TIME 8500 // Length of alarm mp3 file
+#define ALARM_TIME 1000 // Length of alarm mp3 file
 
 // Create a class to control the audio player
 class AudioPlayer 

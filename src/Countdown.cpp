@@ -14,7 +14,7 @@ void Countdown::modifyTime(int& time)
 }
 
 // Function to reset the lastDecrement variable to start when the countdown starts
-void Countdown::resetTimer()
+void Countdown::resetLastDecrement()
 {
     lastDecrement = millis();
 

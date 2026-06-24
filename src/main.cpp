@@ -15,7 +15,8 @@ enum State
   SETTING_TIME,
   COUNTING_DOWN,
   PAUSED,
-  ALARM
+  ALARM,
+  TASK
 };
 
 // Initial state
@@ -61,7 +62,7 @@ void loop()
           countdown.modifyTime(startTime);
 
           // Reset the timer to begin counting down, then change states
-          countdown.resetTimer();
+          countdown.resetLastDecrement();
           currentState = COUNTING_DOWN;
         }
       }
@@ -120,7 +121,7 @@ void loop()
       if(keypad.resumePressed()) 
       {
         // Reset the timer to begin counting down, then change states
-        countdown.resetTimer();
+        countdown.resetLastDecrement();
         currentState = COUNTING_DOWN;
       }
 
@@ -140,8 +141,30 @@ void loop()
     {
       // Display 0 to indicate that the timer has been completed
       display.displayNumber(0);
+
+      // Play the alarm
       player.playAlarm();
+
+      // Get and return the pressed key
+      uint8_t key = keypad.getKey();
+
+      // Update the events
+      keypad.updateEvents(key);
+
+      // Check if the enter key has been entered
+      if(keypad.enterPressed())
+      {
+        // Switch to the interactive state
+        currentState = TASK;
+      }
+
       break;
+    }
+
+    case TASK:
+    {
+      // Display 100 as a test
+      display.displayNumber(100);
     }
   }
 }
