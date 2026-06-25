@@ -16,8 +16,7 @@ void AudioPlayer::init()
    // Check if there is an error, and send a message if so
    if(!player.begin(DFSerial))
    {
-      pinMode(2, OUTPUT);
-      digitalWrite(2, HIGH);
+      // Output message and stop the program (FIX LATER)
       Serial.print("DFPlayer failed.\n\nEnsure proper connection and whether SD card is properly inserted.");
       while(true);
    }
