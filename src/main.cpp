@@ -165,6 +165,7 @@ void loop()
     {
       // Display 100 as a test
       display.displayNumber(100);
+      player.test();
     }
   }
 }

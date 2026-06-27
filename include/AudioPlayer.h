@@ -29,7 +29,11 @@ class AudioPlayer
         // Initializer
         void init();
 
+        // Play the alarm
         void playAlarm();
+
+        // Test an English and Italian track
+        void test();
 };
 
 #endif

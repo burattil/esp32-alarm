@@ -32,7 +32,19 @@ void AudioPlayer::playAlarm()
    if(millis() - lastPlayTime >= ALARM_TIME)
    {
       // Play it, and store when it began
-      player.play(1);
+      player.playFolder(3, 1);
       lastPlayTime = millis();
    }
+}
+
+// Test function
+void AudioPlayer::test()
+{
+   // Play the first English word
+   player.playFolder(1, 1);
+   delay(10000);
+
+   // Play the first Italian word
+   player.playFolder(2, 1);
+   delay(10000);
 }
