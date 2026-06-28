@@ -4,9 +4,9 @@
 // Constructor function
 AudioPlayer::AudioPlayer(uint8_t rx, uint8_t tx, uint8_t busy)
    : DFSerial(2), // Communication set with UART2 on ESP32
-   rxPin(rx), // Sets the values of private rxPin and txPin to rx and tx, respectively
-   txPin(tx), // to be initialized in the init() function after hardware is initialized
-   busyPin(busy) {} // Sets the location of the busy pin on the ESP32
+     rxPin(rx), // Sets the values of private rxPin and txPin to rx and tx, respectively
+     txPin(tx), // to be initialized in the init() function after hardware is initialized
+     busyPin(busy) {} // Sets the location of the busy pin on the ESP32
 
 // Initializing function
 void AudioPlayer::init()
@@ -17,9 +17,12 @@ void AudioPlayer::init()
    // Initialize the busy pin
    pinMode(busyPin, INPUT);
 
-   // Check if there is an error, and send a message if so
+   // Check if there is an error, shine a light, and send a message if so
    if(!player.begin(DFSerial))
    {
+      // Turn on LED
+      pinMode(2, OUTPUT);
+      digitalWrite(2, HIGH);
       // Output message and stop the program (FIX LATER)
       Serial.print("DFPlayer failed.\n\nEnsure proper connection and whether SD card is properly inserted.");
       while(true);
@@ -41,6 +44,7 @@ void AudioPlayer::playAlarm()
    // Only send the command if it is not currently playing
    if(!isPlaying())
    {
+      // Play folder 03, file 001 (ALARM)
       player.playFolder(3, 1);
    }
 }

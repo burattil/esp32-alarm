@@ -3,17 +3,15 @@
 
 // Save the row and column pins to the class to be used throughout the function 
 Keypad::Keypad(uint8_t rA, uint8_t rB, uint8_t rC, uint8_t rD, uint8_t cA, uint8_t cB, uint8_t cC, uint8_t cD)
-{
-  rOne = rA;
-  rTwo = rB;
-  rThree = rC;
-  rFour = rD;
+  : rOne(rA),
+    rTwo(rB),
+    rThree(rC),
+    rFour(rD),
 
-  cOne = cA;
-  cTwo = cB;
-  cThree = cC;
-  cFour = cD;
-}
+    cOne(cA),
+    cTwo(cB),
+    cThree(cC),
+    cFour(cD) {}
 
 // Initalize the rows and columns as outputs and inputs (with pull-up resistors), respectively
 void Keypad::init()

@@ -3,6 +3,7 @@
 #include "Countdown.h"
 #include "Display.h"
 #include "Keypad.h"
+#include "Task.h"
 
 // Constants for the DFPlayer Mini
 #define RX_PIN 16
@@ -23,13 +24,14 @@
 #define COL_THREE 12
 #define COL_FOUR 13
 
-AudioPlayer player(RX_PIN, TX_PIN, BUSY_PIN); // DFPlayer Mini object
+AudioPlayer audioPlayer(RX_PIN, TX_PIN, BUSY_PIN); // DFPlayer Mini object
 Countdown countdown; // Countdown object
 Display display(CLK, DIO); // Display object
 Keypad keypad(ROW_ONE, ROW_TWO, ROW_THREE, ROW_FOUR, COL_ONE, COL_TWO, COL_THREE, COL_FOUR); // Keypad object
+Task task(audioPlayer); // Task object
 
 // Create state machine to handle the different states of the program
-enum State
+enum class MainState
 {
   SETTING_TIME,
   COUNTING_DOWN,
@@ -39,7 +41,7 @@ enum State
 };
 
 // Initial state
-State currentState = SETTING_TIME;
+MainState mainState = MainState::SETTING_TIME;
 
 // Variable to store the time being set
 int startTime = 0;
@@ -49,17 +51,17 @@ void setup()
   // Initializations
   Serial.begin(115200); // Initialize the baud rate for debugging
   display.init();
-  player.init();
+  audioPlayer.init();
   keypad.init();
 }
 
 void loop() 
 {
   // Switch statement derived from the state machine
-  switch(currentState)
+  switch(mainState)
   {
     // Get the initial value from the user
-    case SETTING_TIME:
+    case MainState::SETTING_TIME:
     {
       // Get and return the pressed key
       uint8_t key = keypad.getKey();
@@ -82,7 +84,7 @@ void loop()
 
           // Reset the timer to begin counting down, then change states
           countdown.resetLastDecrement();
-          currentState = COUNTING_DOWN;
+          mainState = MainState::COUNTING_DOWN;
         }
       }
 
@@ -95,7 +97,7 @@ void loop()
       break;
     }
 
-    case COUNTING_DOWN:
+    case MainState::COUNTING_DOWN:
     {
       // Get and return the pressed key
       uint8_t key = keypad.getKey();
@@ -108,24 +110,24 @@ void loop()
       countdown.decrementTimeMMSS(startTime);
 
       // Check if the pause button is pressed to change states
-      if(keypad.pausePressed()) currentState = PAUSED;
+      if(keypad.pausePressed()) mainState = MainState::PAUSED;
 
       // Check if the reset button is pressed to change states
       else if(keypad.resetPressed()) 
       {
-        currentState = SETTING_TIME;
+        mainState = MainState::SETTING_TIME;
 
         // Reset the time being set to 0
         startTime = 0;
       }
 
       // Check if the time has reached 0 to change states
-      else if(startTime == 0) currentState = ALARM;
+      else if(startTime == 0) mainState = MainState::ALARM;
 
       break;
     }
 
-    case PAUSED:
+    case MainState::PAUSED:
     {
       // Get and return the pressed key
       uint8_t key = keypad.getKey();
@@ -141,13 +143,13 @@ void loop()
       {
         // Reset the timer to begin counting down, then change states
         countdown.resetLastDecrement();
-        currentState = COUNTING_DOWN;
+        mainState = MainState::COUNTING_DOWN;
       }
 
       // Check if the reset button is pressed to change states
       else if(keypad.resetPressed()) 
       {
-        currentState = SETTING_TIME;
+        mainState = MainState::SETTING_TIME;
 
         // Reset the time being set to 0
         startTime = 0;
@@ -156,13 +158,13 @@ void loop()
       break;
     }
 
-    case ALARM:
+    case MainState::ALARM:
     {
       // Display 0 to indicate that the timer has been completed
       display.displayNumber(0);
 
       // Play the alarm
-      player.playAlarm();
+      audioPlayer.playAlarm();
 
       // Get and return the pressed key
       uint8_t key = keypad.getKey();
@@ -173,17 +175,21 @@ void loop()
       // Check if the enter key has been entered
       if(keypad.enterPressed())
       {
-        // Switch to the interactive state
-        currentState = TASK;
+        // Switch to the interactive state and reset it
+        mainState = MainState::TASK;
+        task.reset();
       }
 
       break;
     }
 
-    case TASK:
+    case MainState::TASK:
     {
       // Display 100 as a test
       display.displayNumber(100);
+      task.update();
+
+      break;
     }
   }
 }

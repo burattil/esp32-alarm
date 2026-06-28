@@ -1,6 +1,54 @@
 #ifndef TASK_H
 #define TASK_H
 
+#include "AudioPlayer.h"
 
+#define ENGLISH_FOLDER 1
+#define ITALIAN_FOLDER 2
+#define WAIT_TIME 1500
+
+// Create a class to handle the task logic
+class Task
+{
+    private:
+        // Create a reference to the AudioPlayer object already created
+        AudioPlayer& audioPlayer;
+
+        // Create a state machine to implement logic
+        enum class TaskState
+        {
+            ENGLISH_WORD,
+            WAIT_ONE,
+            ITALIAN_WORD_ONE,
+            WAIT_TWO,
+            ITALIAN_WORD_TWO,
+            WAIT_THREE,
+            ITALIAN_WORD_THREE,
+            WAIT_FOUR,
+            ITALIAN_WORD_FOUR
+        };
+
+        // Create a variable to hold the state
+        TaskState taskState = TaskState::ENGLISH_WORD;
+
+        // Create a variable to determine if the audio has started
+        bool audioStarted = false;
+
+        // Helper function to determine if enough time has elapsed between words
+        bool timeElapsed(unsigned long& startTime, unsigned long waitTime);
+
+        // Variable to determine when the wait time began
+        unsigned long waitStartTime = 0;
+
+    public:
+        // Constructor function
+        Task(AudioPlayer& audio);
+
+        // State reset function
+        void reset();
+
+        // Update function to continually loop through the task states
+        void update();
+};
 
 #endif

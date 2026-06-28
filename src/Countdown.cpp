@@ -25,7 +25,7 @@ void Countdown::resetLastDecrement()
 void Countdown::decrementTimeMMSS(int& time)
 {
     // If it has been more than a second since the last decrement, decrement the time
-    if(millis() - lastDecrement > 1000) 
+    if(millis() - lastDecrement >= 1000) 
     {
         // Count down in terms of minutes and seconds
         if(time == 0) time = 0;  // If it is passing 0, keep it at 0
@@ -43,7 +43,7 @@ void Countdown::decrementTimeMMSS(int& time)
 void Countdown::decrementTimeHHMM(int& time)
 {
     // If it has been more than a minute since the last decrement, decrement the time
-    if(millis() - lastDecrement > 60000) 
+    if(millis() - lastDecrement >= 60000) 
     {
         // Count down in terms of hours and minutes
         if(time == 0) time = 0;  // If it is 0, keep it at 0
