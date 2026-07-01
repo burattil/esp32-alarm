@@ -5,6 +5,7 @@
 
 #define ENGLISH_FOLDER 1
 #define ITALIAN_FOLDER 2
+#define TOTAL_WORDS 7
 #define WAIT_TIME 1500
 
 // Create a class to handle the task logic
@@ -25,7 +26,8 @@ class Task
             WAIT_THREE,
             ITALIAN_WORD_THREE,
             WAIT_FOUR,
-            ITALIAN_WORD_FOUR
+            ITALIAN_WORD_FOUR,
+            WAIT_POST
         };
 
         // Create a variable to hold the state
@@ -34,11 +36,25 @@ class Task
         // Create a variable to determine if the audio has started
         bool audioStarted = false;
 
+        // Variable to determine when the wait time began
+        unsigned long waitStartTime = 0;
+
+        // Variables to store the words 
+        uint16_t englishWord;
+        uint16_t italianWords[4];
+        uint16_t correctChoice;
+
         // Helper function to determine if enough time has elapsed between words
         bool timeElapsed(unsigned long& startTime, unsigned long waitTime);
 
-        // Variable to determine when the wait time began
-        unsigned long waitStartTime = 0;
+        // Helper function to select the words
+        void selectWords();
+
+        // Helper function to randomize the words
+        void shuffleWords();
+        
+        // Helper function to create a new set of words in a randomized order
+        void newWords();
 
     public:
         // Constructor function
