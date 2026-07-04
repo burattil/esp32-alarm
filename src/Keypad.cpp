@@ -142,6 +142,9 @@ void Keypad::updateEvents(uint8_t key)
   // If RESUME is pressed, set the resume variable
   else if(key == RESUME_KEY) resumeEvent = true;
 
+  // If DELETE is pressed, set the delete variable
+  else if(key == DELETE_KEY) repeatEvent = true;
+
   return;
 }
 
@@ -198,6 +201,21 @@ bool Keypad::resetPressed()
   {
     // Reset the reset event variable and return true
     resetEvent = false;
+    return true;
+  }
+
+  // Otherwise, return false
+  return false;
+}
+
+// Function to determine if DELETE is pressed to change states
+bool Keypad::repeatPressed()
+{
+  // If DELETE is pressed, return true
+  if(repeatEvent) 
+  {
+    // Reset the repeat event variable and return true
+    repeatEvent = false;
     return true;
   }
 

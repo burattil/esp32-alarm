@@ -23,11 +23,12 @@ class Keypad
     // Value to store when the last press was
     int lastPress = 0;
 
-    // Values to determine if enter, pause, or resume has been pressed
+    // Values to determine if enter, pause, resume, or delete has been pressed
     bool enterEvent = false;
     bool pauseEvent = false;
     bool resumeEvent = false;
     bool resetEvent = false;
+    bool repeatEvent = false;
 
     // Scan once
     uint8_t scanOnce();
@@ -59,6 +60,9 @@ class Keypad
 
     // Function to determine if RESET is pressed to change states
     bool resetPressed();
+
+    // Function to determine if DELETE is pressed to change states
+    bool repeatPressed();
 };
 
 #endif

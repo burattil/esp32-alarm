@@ -109,7 +109,7 @@ void Task::newWords()
 void Task::reset()
 {
     // Change the state to the first state
-    taskState = TaskState::ENGLISH_WORD;
+    taskState = TaskState::WAIT_FOR_START;
 
     // Rerandomize the words
     newWords();
@@ -180,6 +180,19 @@ void Task::update()
     // Loop through the different states
     switch(taskState)
     {
+        // Have a brief wait at the beginning before entering the first state
+        case(TaskState::WAIT_FOR_START):
+        {
+            // Check if enough time has elapsed
+            if(timeElapsed(waitStartTime, WAIT_TIME))
+            {
+                // If so, move to the next state
+                taskState = TaskState::ENGLISH_WORD;
+            }
+
+            break;
+        }
+
         // Let the English word play
         case(TaskState::ENGLISH_WORD):
         {
@@ -205,6 +218,26 @@ void Task::update()
         // Wait between English and first Italian word
         case(TaskState::WAIT_ONE):
         {
+            // Get and return the pressed key
+            uint8_t key = keypad.getKey();
+
+            // Update the events
+            keypad.updateEvents(key);
+
+            // Check if the user would like to hear the previous word again
+            if(keypad.repeatPressed())
+            {
+                // Go back to the previous state
+                taskState = TaskState::WAIT_FOR_START;
+            }
+
+            // Check if the user would like to hear everything again
+            if(keypad.resetPressed())
+            {
+                // Go back to the first state
+                taskState = TaskState::WAIT_FOR_START;
+            }
+
             // Check if enough time has elapsed
             if(timeElapsed(waitStartTime, WAIT_TIME))
             {
@@ -240,6 +273,26 @@ void Task::update()
         // Wait between first and second Italian word
         case(TaskState::WAIT_TWO):
         {
+            // Get and return the pressed key
+            uint8_t key = keypad.getKey();
+
+            // Update the events
+            keypad.updateEvents(key);
+
+            // Check if the user would like to hear the previous word again
+            if(keypad.repeatPressed())
+            {
+                // Go back to the previous state
+                taskState = TaskState::WAIT_ONE;
+            }
+
+            // Check if the user would like to hear everything again
+            if(keypad.resetPressed())
+            {
+                // Go back to the first state
+                taskState = TaskState::WAIT_FOR_START;
+            }
+
             // Check if enough time has elapsed
             if(timeElapsed(waitStartTime, WAIT_TIME))
             {
@@ -275,6 +328,26 @@ void Task::update()
         // Wait between second and third Italian word
         case(TaskState::WAIT_THREE):
         {
+            // Get and return the pressed key
+            uint8_t key = keypad.getKey();
+
+            // Update the events
+            keypad.updateEvents(key);
+
+            // Check if the user would like to hear the previous word again
+            if(keypad.repeatPressed())
+            {
+                // Go back to the previous state
+                taskState = TaskState::WAIT_TWO;
+            }
+
+            // Check if the user would like to hear everything again
+            if(keypad.resetPressed())
+            {
+                // Go back to the first state
+                taskState = TaskState::WAIT_FOR_START;
+            }
+
             // Check if enough time has elapsed
             if(timeElapsed(waitStartTime, WAIT_TIME))
             {
@@ -310,6 +383,26 @@ void Task::update()
         // Wait between third and fourth Italian word
         case(TaskState::WAIT_FOUR):
         {
+            // Get and return the pressed key
+            uint8_t key = keypad.getKey();
+
+            // Update the events
+            keypad.updateEvents(key);
+
+            // Check if the user would like to hear the previous word again
+            if(keypad.repeatPressed())
+            {
+                // Go back to the previous state
+                taskState = TaskState::WAIT_THREE;
+            }
+
+            // Check if the user would like to hear everything again
+            if(keypad.resetPressed())
+            {
+                // Go back to the first state
+                taskState = TaskState::WAIT_FOR_START;
+            }
+
             // Check if enough time has elapsed
             if(timeElapsed(waitStartTime, WAIT_TIME))
             {
@@ -347,6 +440,23 @@ void Task::update()
         {
             // Get the pressed key from the keypad
             uint8_t key = keypad.getKey();
+
+            // Update the events
+            keypad.updateEvents(key);
+
+            // Check if the user would like to hear the previous word again
+            if(keypad.repeatPressed())
+            {
+                // Go back to the previous state
+                taskState = TaskState::WAIT_FOUR;
+            }
+
+            // Check if the user would like to hear everything again
+            if(keypad.resetPressed())
+            {
+                // Go back to the first state
+                taskState = TaskState::WAIT_FOR_START;
+            }
 
             // Convert the answer to the corresponding index
             uint8_t answerIndex = convertToIndex(key);

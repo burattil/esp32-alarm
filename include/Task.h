@@ -7,7 +7,7 @@
 #define ENGLISH_FOLDER 1
 #define ITALIAN_FOLDER 2
 #define TOTAL_WORDS 7
-#define WAIT_TIME 1500
+#define WAIT_TIME 2000
 #define WAIT_FOR_INPUT_TIME 15000
 
 // Create a class to handle the task logic
@@ -23,6 +23,7 @@ class Task
         // Create a state machine to implement logic
         enum class TaskState
         {
+            WAIT_FOR_START,
             ENGLISH_WORD,
             WAIT_ONE,
             ITALIAN_WORD_ONE,
