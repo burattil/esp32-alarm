@@ -2,9 +2,10 @@
 #include "Task.h"
 
 // Constructor function
-Task::Task(AudioPlayer& audio)
+Task::Task(AudioPlayer& audio, Keypad& keypad)
     // Assign the audioPlayer object to one already created
-    : audioPlayer(audio) {} 
+    : audioPlayer(audio),
+      keypad(keypad) {} 
 
 // Helper function to determine if enough time has elapsed
 bool Task::timeElapsed(unsigned long& startTime, unsigned long waitTime)
@@ -114,6 +115,65 @@ void Task::reset()
     newWords();
 }
 
+// Helper function to convert the selected answer to the corresponding index
+uint8_t Task::convertToIndex(uint8_t answer)
+{
+    // Convert the answer to the corresponding index
+    if(answer == 1) return 0;
+    else if(answer == 2) return 1;
+    else if(answer == 3) return 2;
+    else if(answer == 4) return 3;
+
+    // If the answer is invalid, return an invalid index
+    return NO_KEY;
+}
+
+// Helper function to submit the answer
+void Task::submitAnswer(uint8_t answerIndex)
+{
+    // If the answer is correct, go to the success state
+    if(answerIndex == correctIndex)
+    {
+        taskState = TaskState::SUCCESS;
+    }
+
+    // If the ansewr is incorrect, play the alarm
+    else
+    {
+        taskState = TaskState::FAILURE;
+    }
+}
+
+// Function to determine if the user is inactive
+bool Task::isInactive()
+{
+    // If the user is inactive, return true
+    if(inactive)
+    {
+        // Reset the inactive variable and return true
+        inactive = false;
+        return true;
+    }
+
+    // Otherwise, return false
+    return false;
+}
+
+// Function to determine if the task has been completed successfully
+bool Task::isTaskCompleted()
+{
+    // If the task has been completed, return true
+    if(taskCompleted)
+    {
+        // Reset the taskCompleted variable and return true
+        taskCompleted = false;
+        return true;
+    }
+
+    // Otherwise, return false
+    return false;
+}
+
 // Create a function to update which state the task is in
 void Task::update()
 {
@@ -122,6 +182,7 @@ void Task::update()
     {
         // Let the English word play
         case(TaskState::ENGLISH_WORD):
+        {
             // Only play if it is not already playing
             if(!audioStarted)
             {
@@ -139,9 +200,11 @@ void Task::update()
             }
 
             break;
+        }
 
         // Wait between English and first Italian word
         case(TaskState::WAIT_ONE):
+        {
             // Check if enough time has elapsed
             if(timeElapsed(waitStartTime, WAIT_TIME))
             {
@@ -150,9 +213,11 @@ void Task::update()
             }
 
             break;
+        }
 
         // Let the first Italian word play
         case(TaskState::ITALIAN_WORD_ONE):
+        {
             // Only play if it is not already playing
             if(!audioStarted)
             {
@@ -170,9 +235,11 @@ void Task::update()
             }
 
             break;
+        }
 
         // Wait between first and second Italian word
         case(TaskState::WAIT_TWO):
+        {
             // Check if enough time has elapsed
             if(timeElapsed(waitStartTime, WAIT_TIME))
             {
@@ -181,9 +248,11 @@ void Task::update()
             }
 
             break;
+        }
 
         // Let the second Italian word play
         case(TaskState::ITALIAN_WORD_TWO):
+        {
             // Only play if it is not already playing
             if(!audioStarted)
             {
@@ -201,9 +270,11 @@ void Task::update()
             }
 
             break;
-            
+        }    
+        
         // Wait between second and third Italian word
         case(TaskState::WAIT_THREE):
+        {
             // Check if enough time has elapsed
             if(timeElapsed(waitStartTime, WAIT_TIME))
             {
@@ -212,9 +283,11 @@ void Task::update()
             }
 
             break;
+        }
             
         // Let the third Italian word play
         case(TaskState::ITALIAN_WORD_THREE):
+        {
             // Only play if it is not already playing
             if(!audioStarted)
             {
@@ -232,9 +305,11 @@ void Task::update()
             }
 
             break;
+        }
 
         // Wait between third and fourth Italian word
         case(TaskState::WAIT_FOUR):
+        {
             // Check if enough time has elapsed
             if(timeElapsed(waitStartTime, WAIT_TIME))
             {
@@ -243,9 +318,11 @@ void Task::update()
             }
 
             break;
+        }
 
         // Let the fourth Italian word play
         case(TaskState::ITALIAN_WORD_FOUR):
+        {
             // Only play if it is not already playing
             if(!audioStarted)
             {
@@ -263,16 +340,55 @@ void Task::update()
             }
 
             break;
+        }
 
         // Wait state 
         case(TaskState::WAIT_FOR_INPUT):
-            // Check if enough time has elapsed
-            if(timeElapsed(waitStartTime, WAIT_TIME))
+        {
+            // Get the pressed key from the keypad
+            uint8_t key = keypad.getKey();
+
+            // Convert the answer to the corresponding index
+            uint8_t answerIndex = convertToIndex(key);
+
+            // Submit the answer if it is valid
+            if(answerIndex != NO_KEY)
             {
-                // If so, move to the next state
-                taskState = TaskState::ENGLISH_WORD;
+                submitAnswer(answerIndex);
+            }
+
+            // Make sure that the input is not left open for too long
+            if(timeElapsed(waitStartTime, WAIT_FOR_INPUT_TIME))
+            {
+                // Set the activity 
+                inactive = true;
             }
 
             break;
+        }
+
+        // Success state
+        case(TaskState::SUCCESS):
+        {
+            // Switch the taskCompleted variable to true
+            taskCompleted = true;
+
+            break;
+        }
+
+        // Fail state
+        case(TaskState::FAILURE):
+        {
+            // Play the alarm
+            audioPlayer.playAlarm();
+            
+            // Only stay here for a second, the return to the input state
+            if(timeElapsed(waitStartTime, 1000))
+            {
+                taskState = TaskState::WAIT_FOR_INPUT;
+            }
+
+            break;
+        }
     }
 }

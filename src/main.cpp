@@ -28,7 +28,7 @@ AudioPlayer audioPlayer(RX_PIN, TX_PIN, BUSY_PIN); // DFPlayer Mini object
 Countdown countdown; // Countdown object
 Display display(CLK, DIO); // Display object
 Keypad keypad(ROW_ONE, ROW_TWO, ROW_THREE, ROW_FOUR, COL_ONE, COL_TWO, COL_THREE, COL_FOUR); // Keypad object
-Task task(audioPlayer); // Task object
+Task task(audioPlayer, keypad); // Task object
 
 // Create state machine to handle the different states of the program
 enum class MainState
@@ -185,9 +185,21 @@ void loop()
 
     case MainState::TASK:
     {
-      // Display 100 as a test
-      display.displayNumber(100);
       task.update();
+
+      // Check if the task has been completed successfully
+      if(task.isTaskCompleted())
+      {
+        // Switch back to the alarm state
+        mainState = MainState::SETTING_TIME;
+      }
+
+      // Check if the user is inactive
+      if(task.isInactive())
+      {
+        // Switch back to the alarm state
+        mainState = MainState::ALARM;
+      } 
 
       break;
     }
