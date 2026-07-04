@@ -81,14 +81,27 @@ void Task::shuffleWords()
     }
 }
 
+// Helper function to set the correct index
+void Task::setCorrectIndex()
+{
+    // Loop through the Italian words to find the correct index
+    for(int i = 0; i < 4; i++)
+    {
+        // If they match, set the correct index to that index and break the loop
+        if(italianWords[i] == englishWord)
+        {
+            correctIndex = i;
+            break;
+        }
+    }
+}
+
 // Helper function to create a new set of words in a randomized order
 void Task::newWords()
 {
-    // Select the words
     selectWords();
-
-    // Shuffle the words
     shuffleWords();
+    setCorrectIndex();
 }
 
 // Function to reset the task when re-entering that state
@@ -245,14 +258,14 @@ void Task::update()
             else if(audioStarted && !audioPlayer.isPlaying())
             {
                 // Go to the next state and make audioStarted false again
-                taskState = TaskState::WAIT_POST;
+                taskState = TaskState::WAIT_FOR_INPUT;
                 audioStarted = false;
             }
 
             break;
 
         // Wait state 
-        case(TaskState::WAIT_POST):
+        case(TaskState::WAIT_FOR_INPUT):
             // Check if enough time has elapsed
             if(timeElapsed(waitStartTime, WAIT_TIME))
             {

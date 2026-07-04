@@ -27,7 +27,7 @@ class Task
             ITALIAN_WORD_THREE,
             WAIT_FOUR,
             ITALIAN_WORD_FOUR,
-            WAIT_POST
+            WAIT_FOR_INPUT
         };
 
         // Create a variable to hold the state
@@ -42,7 +42,7 @@ class Task
         // Variables to store the words 
         uint16_t englishWord;
         uint16_t italianWords[4];
-        uint16_t correctChoice;
+        uint16_t correctIndex;
 
         // Helper function to determine if enough time has elapsed between words
         bool timeElapsed(unsigned long& startTime, unsigned long waitTime);
@@ -52,6 +52,9 @@ class Task
 
         // Helper function to randomize the words
         void shuffleWords();
+
+        // Helper function to set the correct index
+        void setCorrectIndex();
         
         // Helper function to create a new set of words in a randomized order
         void newWords();
