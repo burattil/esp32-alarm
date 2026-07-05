@@ -49,6 +49,17 @@ void AudioPlayer::playAlarm()
    }
 }
 
+// Function to play the success audio
+void AudioPlayer::playSuccess()
+{
+   // Only send the command if it is not currently playing
+   if(!isPlaying())
+   {
+      // Play folder 03, file 002 (SUCCESS)
+      player.playFolder(3, 2);
+   }
+}
+
 // Function to play the desired word
 void AudioPlayer::playAudio(uint8_t folder, uint16_t file)
 {

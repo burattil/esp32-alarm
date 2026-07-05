@@ -33,6 +33,9 @@ class AudioPlayer
         // Play the alarm
         void playAlarm();
 
+        // Play the success audio
+        void playSuccess();
+
         // Test an English and Italian track
         void playAudio(uint8_t folder, uint16_t file);
 };

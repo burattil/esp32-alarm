@@ -229,17 +229,23 @@ void Task::update()
             {
                 // Go back to the previous state
                 taskState = TaskState::WAIT_FOR_START;
+
+                // Reset the waitStartTime variable to 0 so that the wait time is reset
+                waitStartTime = 0;
             }
 
             // Check if the user would like to hear everything again
-            if(keypad.resetPressed())
+            else if(keypad.resetPressed())
             {
                 // Go back to the first state
                 taskState = TaskState::WAIT_FOR_START;
+
+                // Reset the waitStartTime variable to 0 so that the wait time is reset
+                waitStartTime = 0;
             }
 
             // Check if enough time has elapsed
-            if(timeElapsed(waitStartTime, WAIT_TIME))
+            else if(timeElapsed(waitStartTime, WAIT_TIME))
             {
                 // If so, move to the next state
                 taskState = TaskState::ITALIAN_WORD_ONE;
@@ -284,17 +290,23 @@ void Task::update()
             {
                 // Go back to the previous state
                 taskState = TaskState::WAIT_ONE;
+
+                // Reset the waitStartTime variable to 0 so that the wait time is reset
+                waitStartTime = 0;
             }
 
             // Check if the user would like to hear everything again
-            if(keypad.resetPressed())
+            else if(keypad.resetPressed())
             {
                 // Go back to the first state
                 taskState = TaskState::WAIT_FOR_START;
+
+                // Reset the waitStartTime variable to 0 so that the wait time is reset
+                waitStartTime = 0;
             }
 
             // Check if enough time has elapsed
-            if(timeElapsed(waitStartTime, WAIT_TIME))
+            else if(timeElapsed(waitStartTime, WAIT_TIME))
             {
                 // If so, move to the next state
                 taskState = TaskState::ITALIAN_WORD_TWO;
@@ -339,17 +351,23 @@ void Task::update()
             {
                 // Go back to the previous state
                 taskState = TaskState::WAIT_TWO;
+
+                // Reset the waitStartTime variable to 0 so that the wait time is reset
+                waitStartTime = 0;
             }
 
             // Check if the user would like to hear everything again
-            if(keypad.resetPressed())
+            else if(keypad.resetPressed())
             {
                 // Go back to the first state
                 taskState = TaskState::WAIT_FOR_START;
+
+                // Reset the waitStartTime variable to 0 so that the wait time is reset
+                waitStartTime = 0;
             }
 
             // Check if enough time has elapsed
-            if(timeElapsed(waitStartTime, WAIT_TIME))
+            else if(timeElapsed(waitStartTime, WAIT_TIME))
             {
                 // If so, move to the next state
                 taskState = TaskState::ITALIAN_WORD_THREE;
@@ -394,17 +412,23 @@ void Task::update()
             {
                 // Go back to the previous state
                 taskState = TaskState::WAIT_THREE;
+
+                // Reset the waitStartTime variable to 0 so that the wait time is reset
+                waitStartTime = 0;
             }
 
             // Check if the user would like to hear everything again
-            if(keypad.resetPressed())
+            else if(keypad.resetPressed())
             {
                 // Go back to the first state
                 taskState = TaskState::WAIT_FOR_START;
+
+                // Reset the waitStartTime variable to 0 so that the wait time is reset
+                waitStartTime = 0;
             }
 
             // Check if enough time has elapsed
-            if(timeElapsed(waitStartTime, WAIT_TIME))
+            else if(timeElapsed(waitStartTime, WAIT_TIME))
             {
                 // If so, move to the next state
                 taskState = TaskState::ITALIAN_WORD_FOUR;
@@ -449,13 +473,26 @@ void Task::update()
             {
                 // Go back to the previous state
                 taskState = TaskState::WAIT_FOUR;
+
+                // Reset the waitStartTime variable to 0 so that the wait time is reset
+                waitStartTime = 0;
             }
 
             // Check if the user would like to hear everything again
-            if(keypad.resetPressed())
+            else if(keypad.resetPressed())
             {
                 // Go back to the first state
                 taskState = TaskState::WAIT_FOR_START;
+
+                // Reset the waitStartTime variable to 0 so that the wait time is reset
+                waitStartTime = 0;
+            }
+
+            // Make sure that the input is not left open for too long
+            else if(timeElapsed(waitStartTime, WAIT_FOR_INPUT_TIME))
+            {
+                // Set the activity 
+                inactive = true;
             }
 
             // Convert the answer to the corresponding index
@@ -467,21 +504,21 @@ void Task::update()
                 submitAnswer(answerIndex);
             }
 
-            // Make sure that the input is not left open for too long
-            if(timeElapsed(waitStartTime, WAIT_FOR_INPUT_TIME))
-            {
-                // Set the activity 
-                inactive = true;
-            }
-
             break;
         }
 
         // Success state
         case(TaskState::SUCCESS):
         {
-            // Switch the taskCompleted variable to true
-            taskCompleted = true;
+            // Play the success audio
+            audioPlayer.playSuccess();
+
+            // Only stay here for a second, then return to the input state
+            if(timeElapsed(waitStartTime, 1000))
+            {
+                // Switch the taskCompleted variable to true
+                taskCompleted = true;
+            }
 
             break;
         }
