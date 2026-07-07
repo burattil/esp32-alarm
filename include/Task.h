@@ -4,9 +4,9 @@
 #include "AudioPlayer.h"
 #include "Keypad.h"
 
+#define TOTAL_WORDS 100
 #define ENGLISH_FOLDER 1
 #define ITALIAN_FOLDER 2
-#define TOTAL_WORDS 7
 #define WAIT_TIME 1500
 #define WAIT_FOR_INPUT_TIME 15000
 
