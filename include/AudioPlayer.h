@@ -4,6 +4,9 @@
 #include <Arduino.h>
 #include <DFRobotDFPlayerMini.h>
 
+// Volume for the DFPlayer Mini
+uint8_t volume = 20;
+
 // Create a class to control the audio player
 class AudioPlayer 
 {
