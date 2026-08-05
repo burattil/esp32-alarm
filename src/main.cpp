@@ -91,6 +91,9 @@ void loop()
       // If pause is pressed, clear it in this state
       if(keypad.pausePressed()) {}
 
+      // If backspace is pressed, clear it the repeat pressed
+      if(keypad.repeatPressed()) {}
+
       // If the reset button is pressed, reset the time being set to 0
       else if(keypad.resetPressed()) startTime = 0;
 

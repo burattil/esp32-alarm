@@ -4,7 +4,13 @@ An interactive alarm created using an ESP32 microcontroller, display, keypad, a 
 
 The alarm plays an English word followed by four Italian options. Selecting the correct answer silences the alarm, while incorrect answers require more attempts.
 
-INCLUDE GIF HERE.
+<p align="center">
+    <img src="attachments/alarm.png" alt="Interactive Language-Learning Alarm" width="500">
+</p>
+
+## Demonstration
+
+[Watch the demo](attachments/demo.MOV)
 
 ## Usage
 
@@ -158,10 +164,6 @@ The TASK state has several substates
  This design allows the system to be completely responsive while managing keypad input, display updates, timing, and audio playback simultaneously.
 
  INCLUDE STATE MACHINE DIAGRAM HERE.
-
-## Demonstration
-
-INCLUDE VIDEO DEMONSTRATION HERE. 
 
 ## Author
 

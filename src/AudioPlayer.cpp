@@ -29,7 +29,7 @@ void AudioPlayer::init()
    }
 
    // Set the default value to the specified volume
-   player.volume(volume);
+   player.volume(VOLUME);
 }
 
 // Helper function to determine if the player is busy
