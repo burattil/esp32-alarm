@@ -70,13 +70,13 @@ The volume of the speaker can be adjusted in `AudioPlayer.h`.
 
 Several parameters in `Task.h` can be modified: 
 
-    - `TOTAL_WORDS`
+    - TOTAL_WORDS
         - The total number of vocabulary words ranging anywhere from 4–999 (MUST match the number in Words.csv).
 
-    - `WAIT_TIME`
+    - WAIT_TIME
         - The wait time between the audio prompts.
 
-    - `WAIT_FOR_INPUT_TIME`
+    - WAIT_FOR_INPUT_TIME
         - Maximum time allowed for answering before the alarm resumes.
 
 ## Wiring
