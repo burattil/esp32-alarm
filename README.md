@@ -4,10 +4,6 @@ An interactive alarm created using an ESP32 microcontroller, display, keypad, a 
 
 The alarm plays an English word followed by four Italian options. Selecting the correct answer silences the alarm, while incorrect answers require more attempts.
 
-<p align="center">
-    <img src="attachments/alarm.png" alt="Interactive Language-Learning Alarm" width="500">
-</p>
-
 ## Demonstration
 
 https://github.com/user-attachments/assets/b564b586-7415-4338-8848-433ddb43c591
