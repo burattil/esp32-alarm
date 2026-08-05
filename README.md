@@ -10,7 +10,7 @@ The alarm plays an English word followed by four Italian options. Selecting the 
 
 ## Demonstration
 
-[Watch the demo](attachments/demo.MOV)
+[Watch the demo](attachments/demo.mp4)
 
 ## Usage
 
