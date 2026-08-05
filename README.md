@@ -10,13 +10,13 @@ The alarm plays an English word followed by four Italian options. Selecting the 
 
 ## Demonstration
 
-[Watch the demo](attachments/demo.mp4)
+https://github.com/user-attachments/assets/b564b586-7415-4338-8848-433ddb43c591
 
 ## Usage
 
  1. Assemble and connect the MCU to the PC.
- 2. Generate the audio files using the Python script and Words.csv in tools/audio_generator.
- 3. Copy the generated audio files in tools/audio_generator/audio to the microSD card, labelling the english and italian folders as 01 and 02, respectively. Copy the provided folder 03 to the microSD card.
+ 2. Generate the audio files using the Python script and Words.csv in `tools/audio_generator`.
+ 3. Copy the generated audio files in `tools/audio_generator/audio` to the microSD card, labelling the `english` and `italian` folders as `01` and `02`, respectively. Copy the provided folder `03` to the microSD card.
  4. Upload the firmware to the MCU.
  5. Enter the desired alarm duration using the keypad.
  6. Press the Enter key to begin the countdown.
@@ -57,31 +57,31 @@ The alarm plays an English word followed by four Italian options. Selecting the 
 
 ### Audio Generation Software
 
-A Python script is included to automatically generate audio files from a vocabulary list called Words.csv (usable example provided in tools/audio_generator).
+A Python script is included to automatically generate audio files from a vocabulary list called `Words.csv` (usable example provided in `tools/audio_generator`).
 
 The script reads from Words.csv in the following format:
 
 ID,English,Italian
 1,hello,ciao
 
-Using Google Text-to-Speech (gTTS), the English and Italian words are generated and stored in separate folders labelled english and italian, respectively.
+Using Google Text-to-Speech (gTTS), the English and Italian words are generated and stored in separate folders labelled `english` and `italian`, respectively.
 
 ## Configuration
 
-Any of the pins used on the ESP32 for the 4x4 keypad, TM1637 Display, and DFPlayer Mini can be modified in main.cpp.
+Any of the pins used on the ESP32 for the 4x4 keypad, TM1637 Display, and DFPlayer Mini can be modified in `main.cpp`.
 
-Several parameters in Task.h can be modified: 
+The volume of the speaker can be adjusted in `AudioPlayer.h`.
 
-    - TOTAL_WORDS
+Several parameters in `Task.h` can be modified: 
+
+    - `TOTAL_WORDS`
         - The total number of vocabulary words ranging anywhere from 4–999 (MUST match the number in Words.csv).
 
-    - WAIT_TIME
+    - `WAIT_TIME`
         - The wait time between the audio prompts.
 
-    - WAIT_FOR_INPUT_TIME
+    - `WAIT_FOR_INPUT_TIME`
         - Maximum time allowed for answering before the alarm resumes.
-
-The volume of the speaker can be adjusted in AudioPlayer.h.
 
 ## Wiring
 
