@@ -100,7 +100,11 @@ Several parameters in `Task.h` can be modified:
 | DFPlayer Mini BUSY | GPIO 23
 | Speaker | DFPlayer Mini SPK1/SPK2 |
 
-INCLUDE WIRING DIAGRAM HERE.
+<br>
+
+<p>
+ <img width="826" height="298" alt="image" src="https://github.com/user-attachments/assets/44eba96a-53af-4ecc-8259-5e600b8f9f1f">
+</p>
 
 ## Keypad Controls
 
