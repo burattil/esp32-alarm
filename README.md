@@ -57,7 +57,7 @@ A Python script is included to automatically generate audio files from a vocabul
 
 The script reads from Words.csv in the following format:
 
-ID,English,Italian
+ID,English,Italian <br>
 1,hello,ciao
 
 Using Google Text-to-Speech (gTTS), the English and Italian words are generated and stored in separate folders labelled `english` and `italian`, respectively.
@@ -125,6 +125,11 @@ Several parameters in `Task.h` can be modified:
 | * | Pause |
 | # | Resume |
 
+### Alarm
+| Key | Function |
+|-----|----------|
+| D | Continue to Challenge |
+
 ### Vocabulary Challenge
 
 | Key | Function |
@@ -145,6 +150,12 @@ The states include:
  - ALARM
  - TASK
 
+<br>
+
+<p>
+<img width="520" height="613" alt="image" src="https://github.com/user-attachments/assets/3d8f5a3e-3b05-4e9b-826e-bd1b69c862b2" />
+</p>
+
 The TASK state has several substates
 
  - WAIT_FOR_START
@@ -161,9 +172,13 @@ The TASK state has several substates
  - SUCCESS
  - FAILURE
 
- This design allows the system to be completely responsive while managing keypad input, display updates, timing, and audio playback simultaneously.
+<br>
 
- INCLUDE STATE MACHINE DIAGRAM HERE.
+<p>
+<img width="443" height="807" alt="image" src="https://github.com/user-attachments/assets/bd3137d9-ed99-470d-99d1-fa9bcd4c223f" />
+</p>
+
+ This design allows the system to be completely responsive while managing keypad input, display updates, timing, and audio playback simultaneously.
 
 ## Author
 
