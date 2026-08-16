@@ -134,7 +134,7 @@ Several parameters in `Task.h` can be modified:
 
 | Key | Function |
 |-----|----------|
-| 1—4 | Answer selections |
+| 1–4 | Answer selections |
 | A | Repeat last word |
 | B | Restart words |
 
